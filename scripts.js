@@ -22,15 +22,35 @@ function skip(){
 }
 
 function handleUpdateRange(){
-    console.log(this.value)
+    video[this.name] = this.value
+    console.log(video)
 }
+
+function handleProgress(){
+    const percent = (video.currentTime / video.duration) * 100
+    progressField.style.flexBasis = `${percent}%`
+}
+
+function scrub(e){
+    const scrub = (e.offsetX / progress.offsetWidth) * video.duration
+    video.currentTime = scrub
+}
+
+//full screen function
 
 //listener eventi
 video.addEventListener('click', togglePlay)
 video.addEventListener('play', changeButton)
 video.addEventListener('pause', changeButton)
+video.addEventListener('timeupdate', handleProgress)
 
 playPause.addEventListener('click', togglePlay)
+
+progress.addEventListener('click', scrub)
+let mousedown = false
+progress.addEventListener('mousemove', (e) => mousedown && scrub(e))
+progress.addEventListener('mousedow', () => mousedown = true)
+progress.addEventListener('mouseup', () => mousedown = false)
 
 skipButton.forEach(button => button.addEventListener('click', skip))
 
